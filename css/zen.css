@@ -1,0 +1,49 @@
+html {
+	overflow: auto;
+	
+}
+
+body {
+	margin: 0; padding: 0px;
+	font-family: arial, sans-serif;
+	font-size: 2em; line-height: 2em;
+	text-align: center;
+}
+
+.zen-slide {
+	position: absolute;
+	top: 0;
+	left: 0;
+	height: 100%;
+	width: 100%;
+	visibility: hidden;
+}
+ 
+.zen-slide p {
+	width: 800px;
+	margin: 0 auto;
+	margin-top: 20px;
+	margin-bottom: 20px;
+	text-align: justify;
+	line-height: 1.2em;
+}
+
+input, select, button {font-family: arial, sans-serif; font-size: 1.25em}
+
+button.zen {
+	background: url(zen-button.png);
+	border: 1px solid #999;
+	border-top: 1px solid #e0e0e0;
+	border-left: 1px solid #e0e0e0;
+	margin: 10px;
+	padding-left: 5px;
+	padding-right: 5px;
+	height: 58px;
+	width: 200px;
+}
+button.zen:active {
+	border-left: 1px solid #c9c9c9;
+	border-top: 1px solid #c9c9c9;
+	background: none;
+	background-color: #c9c9c9;
+}

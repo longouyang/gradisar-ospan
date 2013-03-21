@@ -1,0 +1,313 @@
+ <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+<html>
+<head>
+  <title>OSPAN</title>
+<script src="js/underscore-1.4.4.min.js"></script>
+<script src="js/jquery-1.9.1.min.js"></script>
+<script src="js/zen-0.4.js"></script>
+<link rel="stylesheet" type="text/css" href="css/zen.css" />
+<style>
+#math-question-text, #math-answer-text {
+  width: 600px;
+  text-align: center;
+  font-size: 2.5em;
+  
+  margin: 0 auto;
+  margin-top: 20%;
+  margin-bottom: 1em;
+}
+
+
+#letter-text {
+  font-size: 100px;
+  margin-top: 300px;
+  text-align: center;
+  line-height: 120px;
+}
+
+table.recall {
+  margin: 0 auto;
+  margin-top: 20px;
+}
+
+.recall {
+  font-size: 1.5em;
+}
+
+.recall td {
+  width: 150px;
+  text-align: center;
+  padding-bottom: 40px;
+}
+
+.recall-clicker {
+  width: 1em;
+  height: 100%;
+  border: 1px solid black;
+  float: left;
+}
+
+.click-letter {
+  float: left;
+  margin-left: 30px;
+}
+
+#wrapper {
+  width: 1024px;
+  margin: 0 auto;
+  position: relative;
+}
+
+#your-letters {
+  font-weight: bold;
+}
+
+.recall-clicker {
+  color: blue;
+}
+
+.bold {
+  font-weight: bold;
+}
+</style>
+</head>
+
+<body>
+
+  <div id="math-percentage" style='position: absolute; width: 100%; display: none; text-align: right; color: red'>
+    Math: <span id="math-percentage-text"></span>
+  </div>
+  
+  <div id="math-error-warning" style='position: absolute; width: 100%; margin-top: 60%; color: red; line-height: 1em; color: red; display: none'>
+    <center><div style='width: 800px'>You have made a total of 3 or more math errors during this trial. Please try your best on the math.</div></center>
+  </div>
+  
+  <div id="wrapper">
+
+<!-- Letters Letters Letters Letters Letters Letters Letters Letters Letters
+Letters Letters Letters Letters Letters Letters Letters Letters Letters
+Letters Letters Letters Letters Letters Letters Letters Letters Letters -->
+
+
+<div class="zen-slide" id="letter-inst-1">
+  <p>In this experiment you will try to memorize letters you see on the screen while you also solve simple math problems.</p>
+  <p>In the next few minutes, you will have some practice to get you familiar with how the experiment works.</p>
+  <p>We will begin by practicing the letter part of the experiment.</p>
+  <button class="zen" type="button" onclick="$z.showSlide('letter-inst-2')">NEXT</button>
+</div>
+
+<div class="zen-slide" id="letter-inst-2">
+  <p>For this practice set, letters will appear on screen one at a time.</p>
+  <p>Try to remember each letter in the order presented.</p>
+  <p>After 2-3 letters have been shown, you will see a screen listing 12 possible letters with a check box beside each one.</p>
+  <p>Your job is to select each letter in the order presented. To do this, use the mouse to select the box beside each letter. The letters you select will appear at the bottom of the screen.</p>
+  <button class="zen" type="button" onclick="$z.showSlide('letter-inst-3')">NEXT</button>
+</div>
+
+<div class="zen-slide" id="letter-inst-3">
+  <p>When you have selected all the letters and they are in the correct order, hit the ENTER box at the bottom right of the screen.</p>
+  <p>If you make a mistake, hit the CLEAR box to start over.</p>
+  <p>If you forget one the letters, click the BLANK box to mark the spot for the missing letter.</p>
+  <p>Remember, it is very important to get the letters in the same order as you seem them. If you forget one, use the BLANK box to mark the position.</p>
+  
+  <button class="zen" type="button" onclick="practiceLetters.start()">START</button>
+</div>
+
+<div class="zen-slide" id="letter">
+  <div id="letter-text"></div>
+</div>
+
+<div class="zen-slide" id="recall">
+  <p style="font-size: 80%; width: 90%; text-align: center">Select the letters in the order presented.<br />Use the blank button to fill in forgotten letters
+
+  <table class="recall">
+    <tr>
+      <td>
+        <div>
+          <div class="recall-clicker">&nbsp;</div>
+          <div class="click-letter">F</div>
+        </div>
+      </td>
+      <td>
+        <div class="recall-clicker">&nbsp;</div>
+        <div class="click-letter">H</div>
+      </td>
+      <td>
+        <div class="recall-clicker">&nbsp;</div>
+        <div class="click-letter">J</div>
+      </td>
+
+    </tr>
+    <tr>
+      <td>
+        <div class="recall-clicker">&nbsp;</div>
+        <div class="click-letter">K</div>
+      </td>
+      <td>
+        <div class="recall-clicker">&nbsp;</div>
+        <div class="click-letter">L</div>
+      </td>
+      <td>
+        <div class="recall-clicker">&nbsp;</div>
+        <div class="click-letter">N</div>
+      </td>
+    </tr>
+    <tr>
+      <td>
+        <div class="recall-clicker">&nbsp;</div>
+        <div class="click-letter">P</div>
+      </td>
+      <td>
+        <div class="recall-clicker">&nbsp;</div>
+        <div class="click-letter">Q</div>
+      </td>
+      <td>
+        <div class="recall-clicker">&nbsp;</div>
+        <div class="click-letter">R</div>
+      </td>
+    </tr>
+    <tr>
+      <td>
+        <div class="recall-clicker">&nbsp;</div>
+        <div class="click-letter">S</div>
+      </td>
+      <td>
+        <div class="recall-clicker">&nbsp;</div>
+        <div class="click-letter">T</div>
+      </td>
+      <td>
+        <div class="recall-clicker">&nbsp;</div>
+        <div class="click-letter">Y</div>
+      </td>
+    </tr>
+  </table>
+  
+  <div style="text-align: center">Your letters: <span id="your-letters"></span></div>
+  
+  <p style="text-align: center"><button class="zen" type="button" id="recall-blank">BLANK</button></p>  
+  
+  <div>
+    <div style="float: left; text-align: center; width: 50%">
+      <button class="zen" type="button" id="recall-clear">CLEAR</button>
+    </div>
+    <div style="float: left; text-align: center; width: 50%">
+      <button class="zen" type="button" id="recall-next">ENTER</button>
+    </div>
+  </div>
+</div>
+
+<!-- Math Math Math Math Math Math Math Math Math Math Math Math Math Math Math 
+Math Math Math Math Math Math Math Math Math Math Math Math Math Math Math 
+Math Math Math Math Math Math Math Math Math Math Math Math Math Math Math -->
+
+<div class="zen-slide" id="math-inst-1">
+  <p>Now you will practice doing the math part of the experiment.</p>
+  <p>A math problem will appear on the screen, like this:</p>
+  <div style='font-size: 2.5em; text-align: center'>(2 × 1) + 1 = ?</div>
+  <p>As soon as you see the math problem, you should compute the correct answer.</p>
+  <p>In the above problem, the 3 is correct.</p>
+  <p>When you know the correct answer, you will click the ENTER button.</p>
+  <button class="zen" type="button" onclick="$z.showSlide('math-inst-2')">NEXT</button>
+</div>
+
+<div class="zen-slide" id="math-inst-2">
+  <p>You will see a number displayed on the next screen, along with a box marked TRUE and a box marked FALSE.</p>
+  <p>If the number on the screen is not the correct answer, click on the FALSE box.</p>
+  <p>For example, if you see the problem <b>(2 x 2) + 1 = ?</b> and the number on the following screen is 5, click the TRUE box, because the answer is correct.</p>
+  
+  <p>If you see the problem <b>(2 x 2) + 1 = ?</b> and the number on the following screen is 6, click the FALSE box, because the correct answer is 5, not 6.</p>
+    
+    
+  <p>After you click on one of the boxes, the computer will tell you if you made the right choice.</p>
+  <button class="zen" type="button" onclick="$z.showSlide('math-inst-3')">NEXT</button>
+</div>
+
+<div class="zen-slide" id="math-inst-3">
+  <p>It is VERY important that you get the math problems correct. It is also important that you try and solve the problem as quickly as you can.</p>
+  <button class="zen" type="button" onclick="practiceMath.start()">START</button>
+</div>
+
+<div class="zen-slide" id="math-question">
+  <div id="math-question-text"></div>
+  
+  <p style="width: 600px;">When you have solved the math problem click ENTER to continue:</p>
+  
+  <button class="zen" type="button" id="math-question-next">ENTER</button>
+</div>
+
+<div class="zen-slide" id="math-answer">
+  <div id="math-answer-text"></div>
+  <div>
+    <div style="float: left; text-align: center; width: 50%">
+      <button class="zen math-response" type="button" id="math-true">TRUE</button>
+    </div>
+    <div style="float: left; text-align: center; width: 50%">
+      <button class="zen math-response" type="button" id="math-false">FALSE</button>
+    </div>
+    <p style="text-align: center" id="math-trial-feedback"></p>
+  </div>
+</div>
+
+<div class="zen-slide" id="math-feedback">
+  <div id="math-feedback-text"></div>
+</div>
+
+
+
+
+
+<div class="zen-slide" id="both-feedback">
+  <p id="both-feedback-letters" style="width: 90%; text-align: center; font-size: 120%; margin-top: 30%">You recalled <span id="correct-letters"></span>&nbsp;letters correctly out of <span id="out-of"></span>.</p>
+  <p id="both-feedback-math" style="width: 90%; text-align: center">You made <span id="math-total-errors"></span>&nbsp;math error(s) for this set of trials</p>
+</div>
+
+<!-- Both Both Both Both Both Both Both Both Both Both Both Both Both Both Both 
+Both Both Both Both Both Both Both Both Both Both Both Both Both Both Both 
+Both Both Both Both Both Both Both Both Both Both Both Both Both Both Both -->
+
+<div class="zen-slide" id="both-inst-1">
+  <div class="zen-slide-center">
+  <p>Now you will practice doing both parts of the experiment at the same time.</p>
+  <p>In the next practice set, you will be given one of the math problems. Once you make your decision about the math problem, a letter will appear on the screen;. Try and remember the letter.</p>
+    <p>In the previous section where you only solved math problems, the computer computed your average time to solve the problems. If you take longer than your average time, the computer will automatically move you onto the letter part, thus skipping the True or False part and will count that problem as a math error. Therefore it is VERY important to solve the problems as quickly and as accurately as possible.</p>
+  <button class="zen" type="button" onclick="$z.showSlide('both-inst-2')">NEXT</button>
+  </div>
+</div>
+
+<div class="zen-slide" id="both-inst-2">
+  <p>After the letter goes away, another math problem will appear, and then another letter. At the end of each set of letters and math problems, a recall screen will appear. Use the mouse to select the letters you just saw. Try your best to get the letters in the correct order.</p>
+  
+  <p>It is important to work QUICKLY and ACCURATELY on the math. Make sure you know the answer to the math problem before clicking to the next screen. You will not be told if your answer to the math problem is correct.</p>
+  
+  <p>After the recall screen, you will be given feedback about your performance regarding both the number of letters recalled and the percent correct on the math problems.</p>
+  <button class="zen" type="button" onclick="$z.showSlide('both-inst-3')">NEXT</button>
+</div>
+
+
+<div class="zen-slide" id="both-inst-3">
+  <p>During the feedback, you will see a number in red in the top right of the screen. This indicates your percent correct for the math problems for the entire experiment.</p>
+  
+  <p>It is VERY important for you to keep this at least at 85%.</p>
+  
+  <p>For our purposes, we can only use data where the participant was at least 85% accurate on the math.</p>
+  
+  <p>Click start to try some practice problems.</p>
+  <button class="zen" type="button" onclick="practiceBoth.start()">START</button>  
+  
+</div>
+
+</div>
+
+
+<div class="zen-slide" id="end">
+  <p>end</p>
+  
+</div>
+
+</div>
+</body>
+
+<script src="experiment.js"></script>
+
+  
+</html>

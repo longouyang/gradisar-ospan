@@ -1,0 +1,40 @@
+<html>
+<head>
+<title></title>
+<script src="js/underscore-1.4.4.min.js"></script>
+<script src="js/jquery-1.9.1.min.js"></script>
+<script src="js/zen-0.4.js"></script>
+<link rel="stylesheet" type="text/css" href="css/zen.css" />
+<style>
+body {
+  font-family: arial;
+}
+</style>
+</head>
+<body>
+  <button type="button" id="launcher">Launch full-screen</button>
+  
+  
+  <iframe id="iframe" src="" style='border: 0'></iframe>
+<pre>
+TODO:
+get params, pass them to ospan.html
+detect user id thing
+</pre>
+</body>
+<script>
+
+var fsIE6 = function() {
+  window.open("ospan.html", "fullscreen", "fullscreen,directories=0,titlebar=0,toolbar=0,location=0,status=0,menubar=0,scrollbars=no,resizable=no")
+}
+
+var fsChrome = function() {
+  var $iframe = $("#iframe")[0];
+  $iframe.webkitRequestFullScreen();
+  $iframe.src = "ospan.html"
+}
+
+$("#launcher").click(fsIE6)
+
+</script>
+</html>
