@@ -6,7 +6,7 @@ Array.prototype.sum = function() {
     r += this[i];
   }
   return r;
-}
+};
 
 var ospan = {};
 var maxMathTime = 2500;
