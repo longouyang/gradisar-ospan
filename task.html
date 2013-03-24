@@ -25,7 +25,7 @@
     </div>
     
     <div id="wrapper">
-      <div class="zen-slide" id="both-inst-1">
+      <div class="zen-slide" id="instructions1">
 	<div class="zen-slide-center">
 	  <p>In this task, you will solve simple math problems while you also
 	    try to memorize words you see on the screen.</p>
@@ -45,13 +45,15 @@
 
       <div class="zen-slide" id="math">
 	<div id="math-prompt"></div>
-	<div>
+	<div style="width: 500px; margin: 0 auto">
 	  <div style="float: left; text-align: center; width: 50%">
-	    <button class="zen math-response" type="button" id="math-true">TRUE</button>
+	    <div>If FALSE<br />Press <b>Q</b></div>
 	  </div>
-	  <div style="float: left; text-align: center; width: 50%">
-	    <button class="zen math-response" type="button" id="math-false">FALSE</button>
+	  <div style="float: right; text-align: center; width: 50%">
+	    <div>If TRUE<br />Press <b>P</b></div>
 	  </div>
+
+
 	</div>
       </div>
 
@@ -72,8 +74,8 @@
 	<p>
 	  The first math problem was <b>true</b> and the second
 	  was <b>false</b>. It is important that these are correct. You should
-	  typed the words <b>disc</b> and <b>form</b> in the text box, each on
-	  its own line. Click NEXT when you are ready to do the next practice
+	  have typed the words <b>disc</b> and <b>form</b> in the text box, each
+	  on its own line. Click NEXT when you are ready to do the next practice
 	  set.
 	</p>
 	<button class="zen" type="button" onclick="stream2.start()">NEXT</button>

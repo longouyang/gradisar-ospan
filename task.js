@@ -119,7 +119,6 @@ var getOuterStream = function(params0) {
                       mathCorrects: corrects,
                       mathRts: rts,
                       mathAccuracyErrors: accuracyErrors,
-                      mathSpeedErrors: speedErrors,
                       mathTotalErrors: totalErrors
                     });
                     
@@ -146,27 +145,33 @@ var getOuterStream = function(params0) {
                 var timeStart = (new Date()).getTime();
 
 	        // set up true and false button clicks
-	        $(".math-response").one("click", function(e) {
-		  $(".math-response").unbind("click");
+                var keyHandler = function(e) {
+                  var keyCode = e.which;
+                  if (!(keyCode == 80 || keyCode == 81)) {
+                    $(document).one("keydown", keyHandler);
+                  } else {
+                    var rt = (new Date()).getTime() - timeStart,
+		        response = (keyCode == 80 ? true : false),
+		        correct = (response == promptCorrect ? 1 : 0);
 
-		  var rt = (new Date()).getTime() - timeStart,
-		      response = (this.id == "math-true"),
-		      correct = (response == promptCorrect ? 1 : 0);
+		    if (!correct) {
+		      localMathErrors++;
+		      totalMathErrors++;
+		    }
 
-		  if (!correct) {
-		    localMathErrors++;
-		    totalMathErrors++;
-		  }
-
-		  $z.showSlide("word");
-		  wait(1000, function() {
-                    innerStream.end({
-		      response: response,
-		      correct: correct,
-		      rt: rt
+		    $z.showSlide("word");
+		    wait(1000, function() {
+                      innerStream.end({
+		        response: response,
+		        correct: correct,
+		        rt: rt
+		      });
 		    });
-		  });
-	        });
+                  }
+                };
+
+                $(document).one("keydown", keyHandler);
+                
 	      }
 	    });
 	    
@@ -251,8 +256,7 @@ var allWords = ["arch","horn","crab","vine","note",
 
 
 
-//$z.showSlide("both-inst-1");
-$z.showSlide("feedback2");
+$z.showSlide("instructions1");
 
 
 
