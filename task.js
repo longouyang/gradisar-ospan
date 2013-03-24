@@ -1,4 +1,4 @@
-/* global $z, $, setTimeout, localStream, _ */
+/* global $z, $, setTimeout, clearTimeout, innerStream, _, console */
 
 Array.prototype.sum = function() {
   var i = this.length, r = 0;
@@ -8,278 +8,145 @@ Array.prototype.sum = function() {
   return r;
 };
 
-var ospan = {};
-var maxMathTime = 2500;
-
-// letter span
-// present letters 800 msec at a time
-
-var practiceLetters = $z.stream({
-  before: function() {
-    // update progress 
-    
-    // show letters slide
-    
-  },
-  trials: [
-    {letters: ["F","P"]},
-    {letters: ["Q","J"]},
-    {letters: ["H","K","T"]},
-    {letters: ["S","N","R"]}
-  ],
-  trialStart: function(params) {
-    $z.showSlide("letter");
-    
-    // params is {letters: <array of letters>}
-    
-    var letters = params.letters,
-        $letterText = $("#letter-text"),
-        numLetters = letters.length;
-    
-    // show all the letters in order for 800ms each
-    _(letters).each(function(letter, index) {
-      setTimeout(function() { $letterText.text(letter) }, index * 800);
-    });
-    
-    // after all letters have been shown, show the recall slide
-    setTimeout(function() {
-      $letterText.text("");
-      setupRecall({
-	letters: letters,
-	show: "letters",
-	callback: practiceLetters.end
-      });
-      
-    }, numLetters * 800);
-    
-  },
-  after: function() {
-    $z.showSlide("math-inst-1");
-  }
-});
+var wait = function(msec, fn) {
+  setTimeout(fn, msec);
+};
 
 function setupRecall(options) {
   (function() {
-    var correctLetters = options.letters,
+    var correctWords = options.words,
         callback = options.callback,
         show = options.show;
-    
-    $(".recall-clicker").html("&nbsp;").unbind("click");
-    $("#recall-blank").unbind("click");
-    $("#recall-next").unbind("click").one("click",endRecall);
-    
-    $("#your-letters").text("");
-    
-    // call setupRecall again if clear is clicked
-    $("#recall-clear").one("click", function(e) {
-      setupRecall(options);
-    });
-    
-    var n = correctLetters.length,
-        responseLetters = [];
-    
-    function addLetter(letter) {
-      responseLetters.push(letter);
-      
-      $("#your-letters").text(responseLetters.join(""));
-      
-      if (responseLetters.length == n) {
-	$(".recall-clicker").unbind("click");
-	$("#recall-blank").unbind("click");
-      }
-    }
-    
-    // add a letter if a recall clicker is clicked
-    $(".recall-clicker").one("click", function(e) {
-      // kludgy way to get the associated letter
-      var letter = $(this).parent().children()[1].innerHTML;
-      addLetter(letter);
-      $(this).text(responseLetters.length);
-    });
+
+    $("#recall-text").val("");
     
     // show feedback for 2 seconds and then end trial
     function endRecall() {
-      var score = 0;
+      var recallText = $("#recall-text").val(),
+          responseWords = recallText.split("\n").map(function(y) { return y.toLowerCase() }),
+          n = responseWords.length,
+          score = 0;
+
       for(var i = 0; i < n; i++) {
-	if (responseLetters[i] == correctLetters[i]) {
-	  score++;
-	}
+        if (responseWords[i] == correctWords[i]) {
+          score++;
+        }
       }
       
-      if (show == "letters") {
-	$("#both-feedback-math").hide();
-      } else {
-	$("#both-feedback-math").show();
-      }
+      // if (show == "words") {
+      //   $("#both-feedback-math").hide();
+      // } else {
+      //   $("#both-feedback-math").show();
+      // }
       
-      $("#correct-letters").text(score);
+      $("#correct-words").text(score);
       $("#out-of").text(n);
-      $z.showSlide("both-feedback");
+      $z.showSlide("blank");
       
-      setTimeout(function() {
-	callback({
-	  length: n,
-	  score: score,
-	  perfect: (score == n ? 1 : 0),
-	  correctLetters: correctLetters,
-	  responseLetters: responseLetters
-	});
-      },
-		 2000);
+      wait(500,
+           function() {
+             callback({
+               length: n,
+               score: score,
+               perfect: (score == n ? 1 : 0),
+               correctWords: correctWords,
+               responseWords: responseWords
+             });
+           });
       
     }
-    
-    // add an underscore if the blank button was clicked 
-    $("#recall-blank").click(function() {
-      addLetter("-");
-    });
+
+    $("#end-recall").one("click", endRecall);
     
     // show the recall slide
-    $z.showSlide("recall");
-
+    $z.showSlide("recall"); 
+    
   })();
 }
 
-var practiceMath = $z.stream({
-  before: function() {
-    // update progress 
-  },
-  trials: [
-    {operation: "(1 × 2) + 1 = ?", numberPrompt: 1, promptCorrect: false},
-    {operation: "(1 ÷ 1) - 1 = ?", numberPrompt: 2, promptCorrect: false},
-    {operation: "(7 × 3) - 3 = ?", numberPrompt: 3, promptCorrect: false}/*
-									  {operation: "(4 × 3) + 4 = ?", numberPrompt: 4, promptCorrect: true},
-									  {operation: "(3 ÷ 3) + 2 = ?", numberPrompt: 5, promptCorrect: true},
-									  {operation: "(2 × 6) - 4 = ?", numberPrompt: 6, promptCorrect: true},
-									  {operation: "(8 × 9) - 8 = ?", numberPrompt: 7, promptCorrect: true},
-									  {operation: "(4 × 5) - 5 = ?", numberPrompt: 8, promptCorrect: true},
-									  {operation: "(4 × 2) + 6 = ?", numberPrompt: 9, promptCorrect: true},
-									  {operation: "(4 ÷ 4) + 7 = ?", numberPrompt: 10, promptCorrect: true},
-									  {operation: "(8 × 2) - 8 = ?", numberPrompt: 11, promptCorrect: true},
-									  {operation: "(2 × 9) - 9 = ?", numberPrompt: 12, promptCorrect: true},
-									  {operation: "(8 ÷ 2) + 9 = ?", numberPrompt: 13, promptCorrect: true},
-									  {operation: "(3 × 8) - 1 = ?", numberPrompt: 14, promptCorrect: true},
-									  {operation: "(6 ÷ 3) + 1 = ?", numberPrompt: 15, promptCorrect: true}*/
-  ],
-  trialStart: function(params) {
-    var operation = params.operation,
-        numberPrompt = params.numberPrompt,
-        promptCorrect = params.promptCorrect;
-    
-    $("#math-trial-feedback").html("");
-    $("#math-question-text").text(operation);
-    $z.showSlide("math-question");
-    
-    $("#math-question-next").one("click", function(e) {
-      $("#math-answer-text").text(numberPrompt);
-      $z.showSlide("math-answer");
-      
-      var timeStart = (new Date()).getTime();
-      
-      // set up true and false button clicks
-      $(".math-response").one("click", function(e) {
-	$(".math-response").unbind("click");
-	
-	var rt = (new Date()).getTime() - timeStart,
-	    response = (this.id == "math-true"),
-	    responseDict = {response: response, rt: rt};
-	
-	$("#math-trial-feedback").html(response == promptCorrect ? "<span style='color: blue'>CORRECT</span>" : "<span style='color: red'>INCORRECT</span>");
-	
-	setTimeout(function() {
-	  practiceMath.end( $.extend(responseDict, params) );
-	},
-		   1000
-		  );
-	
-      }); 
-    });
-    
-    
-  },
-  after: function() {
-    var rts = practiceMath.completed.pluck("rt"),
-        n = rts.length,
-        mean = rts.sum() / n,
-        sd = Math.sqrt(rts.map(function(rt) { return (rt - mean) * (rt - mean) }).sum() / n);
-    
-    ospan.math_time_mean = mean;
-    ospan.math_time_sd = sd;
-    maxMathTime = Math.ceil(mean + 2.5*sd);
-    
-    $z.showSlide("both-inst-1");
-    
-  }
-});
+var getOuterStream = function(params0) {
+  var totalMathErrors = 0,
+      totalMathProblems = 0;
 
-var totalMathErrors = 0,
-    totalMathProblems = 0;
+  var stream =
+        $z.stream({
+	  trials: params0.trials,
+	  after: params0.after,
+	  trialStart: function(params) {
+	    var localMathErrors = 0;
+	    $("#math-error-warning").hide();
+	    
+	    var localTrials = _(params.words).map(function(word, i) {
+	      return $.extend( {word: word}, params.problems[i] );
+	    });
 
-var practiceBoth =
-      $z.stream({
-	trials: [{
-	  letters: ["F","H","J","K"],
-	  problems: [
-	    {operation: "(1 × 2) + 1 = ?",  numberPrompt: 3,  promptCorrect: true},
-	    {operation: "(1 × 2) + 1 = ?",  numberPrompt: 2,  promptCorrect: false},
-	    {operation: "(1 × 2) + 1 = ?",  numberPrompt: 1,  promptCorrect: false},
-	    {operation: "(1 × 2) + 1 = ?",  numberPrompt: 3,  promptCorrect: true}
-	  ]
-	}
-		],
-	after: function() {
-	  $z.showSlide("end");
-	},
-	trialStart: function(params) {
-	  var localMathErrors = 0;
-	  $("#math-error-warning").hide();
-	  
-	  var localTrials = _(params.letters).map(function(letter, i) {
-	    return $.extend( {letter: letter}, params.problems[i] );
-	  });
+	    var innerStream = $z.stream({
+	      trials: localTrials,
+              after:  function() {
+                $("#math-error-warning").hide();
+                $("#math-percentage").hide();
+                
+                if (totalMathProblems > 0) {
+                  $("#math-percentage-text").text(
+                    Math.round((totalMathProblems - totalMathErrors) / totalMathProblems * 100) + "%"
+                  );
+                }
+                
+                var m = innerStream.completed,
+                    responses = m.pluck("response"),
+                    corrects = m.pluck("correct"),
+                    rts = m.pluck("rt"),
+                    totalErrors = _(corrects).filter(function(x) { return !x }).length,
+                    speedErrors = _(rts).filter(function(x) {  return x < 0; }).length,
+                    accuracyErrors = totalErrors - speedErrors;
+                
+                $("#math-total-errors").text(totalErrors);
+                
+                $("#math-percentage").show();
+                
+                setupRecall({
+                  words: params.words,
+                  show: "both",
+                  callback: function(recallProps) {
+                    var v = recallProps;
+                    
+                    stream.end({
+                      recallScore: v.score,
+                      recallPerfect: v.perfect,
+                      correctWords: v.correctWords,
+                      responseWords: v.responseWords,
+                      mathResponses: responses,
+                      mathCorrects: corrects,
+                      mathRts: rts,
+                      mathAccuracyErrors: accuracyErrors,
+                      mathSpeedErrors: speedErrors,
+                      mathTotalErrors: totalErrors
+                    });
+                    
+                    $("#math-percentage").hide();
+                  }
+                });
+                
+              },
+	      trialStart: function(params1) {
+	        $z.showSlide("math");
+	        totalMathProblems++;
+	        
+	        var prompt = params1.prompt,
+		    promptCorrect = params1.promptCorrect,
+                    word = params1.word;
 
-	  localStream = $z.stream({
-	    trials: localTrials,
-	    trialStart: function(params1) {
-	      
-	      totalMathProblems++;
-	      
-	      var operation = params1.operation,
-		  numberPrompt = params1.numberPrompt,
-		  promptCorrect = params1.promptCorrect;
+	        if (localMathErrors >= 3) {
+		  $("#math-error-warning").show();
+	        }
 
-	      if (localMathErrors >= 3) {
-		$("#math-error-warning").show();
-	      }
+                $("#math-prompt").text(prompt);
+                $("#word-text").text(word);
 
-	      $("#math-trial-feedback").html("");
-	      $("#math-question-text").text(operation);
-	      $z.showSlide("math-question");
-	      
-	      $("#letter-text").html(params1.letter);
-	      
-	      // after maxMathTime ms, automatically show letter
-	      var timeOutId = setTimeout(function() {
-		localMathErrors++;
-		totalMathErrors++;
-		$z.showSlide("letter");
-		
-		setTimeout(function() {
-		  localStream.end({
-		    response: null,
-		    rt: -1,
-		    correct: false
-		  });}, 800);
-	      }, maxMathTime);
+                var timeStart = (new Date()).getTime();
 
-	      $("#math-question-next").one("click", function(e) {
-		clearTimeout(timeOutId);
-		$("#math-answer-text").text(numberPrompt);
-		$z.showSlide("math-answer");
-
-		var timeStart = (new Date()).getTime();
-		// set up true and false button clicks
-		$(".math-response").one("click", function(e) {
+	        // set up true and false button clicks
+	        $(".math-response").one("click", function(e) {
 		  $(".math-response").unbind("click");
 
 		  var rt = (new Date()).getTime() - timeStart,
@@ -291,75 +158,108 @@ var practiceBoth =
 		    totalMathErrors++;
 		  }
 
-		  $z.showSlide("letter");
-		  setTimeout(function() { localStream.end({
-		    response: response,
-		    correct: correct,
-		    rt: rt
+		  $z.showSlide("word");
+		  wait(1000, function() {
+                    innerStream.end({
+		      response: response,
+		      correct: correct,
+		      rt: rt
+		    });
 		  });
-					}, 800);
-		});
-	      });
-	    },
-	    after: function() {
-	      $("#math-error-warning").hide();
-	      $("#math-percentage").hide();
-	      
-	      if (totalMathProblems > 0) {
-		$("#math-percentage-text").text(
-		  Math.round((totalMathProblems - totalMathErrors) / totalMathProblems * 100) + "%"
-		);
+	        });
 	      }
-	      
-	      var m = localStream.completed,
-		  responses = m.pluck("response"),
-		  corrects = m.pluck("correct"),
-		  rts = m.pluck("rt"),
-		  totalErrors = _(corrects).filter(function(x) { return !x }).length,
-		  speedErrors = _(rts).filter(function(x) {  return x < 0; }).length,
-		  accuracyErrors = totalErrors - speedErrors;
-	      
-	      $("#math-total-errors").text(totalErrors);
-	      
-	      $("#math-percentage").show();
-	      
-	      setupRecall({
-		letters: params.letters,
-		show: "both",
-		callback: function(recallProps) {
-		  var v = recallProps;
-		  
-		  practiceBoth.end({
-		    recallScore: v.score,
-		    recallPerfect: v.perfect,
-		    correctLetters: v.correctLetters,
-		    responseLetters: v.responseLetters,
-		    mathResponses: responses,
-		    mathCorrects: corrects,
-		    mathRts: rts,
-		    mathAccuracyErrors: accuracyErrors,
-		    mathSpeedErrors: speedErrors,
-		    mathTotalErrors: totalErrors
-		  });
-		  
-		  $("#math-percentage").hide();
-		}
-	      });
-	      
-	    }
-	  });
-	  
-	  localStream.start();
-	}
-      });
+	    });
+	    
+	    innerStream.start();
+	  }
+        });
+
+  return stream;
+
+};
 
 
 
-//practiceMath.start()
+var trials1 = [{words: ["disc","form"],
+                problems: [
+                  {prompt: "10 - 3 = 7", promptCorrect: true},
+                  {prompt: "40 + 50 = 80", promptCorrect: false}
+                ]}],
+    trials2 = [{words: ["germ","yard"],
+                problems: [
+                  {prompt: "56 + 2 = 54", promptCorrect: false},
+                  {prompt: "14 / 2 = 7", promptCorrect: true}
+                ]}],
+    stream1 = getOuterStream({trials: trials1,
+                              after: function() {
+                                $z.showSlide("feedback1");
+                              }
+                             }), 
+    stream2 = getOuterStream({trials: trials2,
+                              after: function() {
+                                $z.showSlide("feedback2");
+                              }
+                             });
+
+var allWords = ["arch","horn","crab","vine","note",
+                 "fort","seal","joke","clay","camp",
+                 "palm","dart","whip","cube","hive",
+                 "cage","pest","tape","hail","tide"],
+    allMath = [
+      {prompt: "24 + 3 = 27", promptCorrect: true, gradeLevel: 31},
+      {prompt: "18/3 = 7", promptCorrect: false, gradeLevel: 46},
+      {prompt: "45 + 2 = 48", promptCorrect: false, gradeLevel: 32},
+      {prompt: "24 - 17 = 7", promptCorrect: true, gradeLevel: 41},
+      {prompt: "7 x 6 = 41", promptCorrect: false, gradeLevel: 52},
+      {prompt: "18 - 7 = 11", promptCorrect: true, gradeLevel: 33},
+      {prompt: "18 + 15 = 33", promptCorrect: true, gradeLevel: 43},
+      {prompt: "8 x 7 = 55", promptCorrect: false, gradeLevel: 38},
+      {prompt: "56 - 21 = 45", promptCorrect: false, gradeLevel: 54},
+      {prompt: "68 + 9 = 77", promptCorrect: true, gradeLevel: 35},
+      {prompt: "2 x 9 = 21", promptCorrect: false, gradeLevel: 44},
+      {prompt: "7 x 5 = 35", promptCorrect: true, gradeLevel: 37},
+      {prompt: "13 + 15 = 29", promptCorrect: false, gradeLevel: 42},
+      {prompt: "44 + 35 = 89", promptCorrect: false, gradeLevel: 56},
+      {prompt: "12 - 3 = 8", promptCorrect: false, gradeLevel: 34},
+      {prompt: "6 x 6 = 36", promptCorrect: true, gradeLevel: 45},
+      {prompt: "23 + 9 = 31", promptCorrect: false, gradeLevel: 36},
+      {prompt: "26 + 51 = 67", promptCorrect: false, gradeLevel: 58},
+      {prompt: "24/3 = 8", promptCorrect: true, gradeLevel: 47},
+      {prompt: "41 + 23 = 64", promptCorrect: true, gradeLevel: 53}
+    ],
+    realWords = allWords.shuffle(),
+    realMath = allMath.shuffle(),
+    trials3 = [2,3,4,5,6].shuffle().map(function(size) {
+      var words = _(realWords).first(size),
+          problems = _(realMath).first(size);
+      
+      // bah, mutation
+      realWords = realWords.slice(size);
+      realMath = realMath.slice(size);
+          
+      return {
+        size: size,
+        words: words,
+        problems: problems
+      };
+    }),
+    stream3 = getOuterStream({trials: trials3,
+                              after: function() {
+                                // TODO
+                                $z.showSlide("end");
+                              }});
+
+
+
 //$z.showSlide("both-inst-1");
-$z.showSlide("letter-inst-1");
-//$z.showSlide("math-inst-1");
+$z.showSlide("feedback2");
 
+
+
+//$z.showSlide("recall");
+
+
+// after real  trials
 
 
 
