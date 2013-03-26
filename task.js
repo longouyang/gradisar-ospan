@@ -234,7 +234,7 @@ var allWords = ["arch","horn","crab","vine","note",
     ],
     realWords = allWords.shuffle(),
     realMath = allMath.shuffle(),
-    trials3 = [2,3,4,5,6].shuffle().map(function(size) {
+    trials3 = /*[2,3,4,5,6]*/[2].shuffle().map(function(size) {
       var words = _(realWords).first(size),
           problems = _(realMath).first(size);
       
@@ -248,15 +248,32 @@ var allWords = ["arch","horn","crab","vine","note",
         problems: problems
       };
     }),
-    stream3 = getOuterStream({trials: trials3,
-                              after: function() {
-                                // TODO
-                                $z.showSlide("end");
-                              }});
+    stream3 = getOuterStream({
+      trials: trials3,
+      after: function() {
+        var trialScores = this.completed.map(function(x) { return x.recallScore / x.correctWords.length }),
+            taskScore = trialScores.sum()/trialScores.length;
+        if (window.opener) {
+          window.opener.done();
+        }
+        $z.showSlide("end");
+        
+        var payload = {
+          taskScore: taskScore
+        };
+        
+        // TODO: ajax
+        $.ajax({
+          type: "POST",
+          url: "mock.php",
+          data: payload,
+          success: function(x) { console.log(x)}
+        });
+      }});
 
 
 
-$z.showSlide("instructions1");
+$z.showSlide("feedback2");
 
 
 
@@ -267,3 +284,10 @@ $z.showSlide("instructions1");
 
 
 
+// TODO: 
+// [x] launcher: read in parameters
+// [ ] task: read in parameters 
+// [v] task: mock ajax post
+// [ ] task: pass through parameters from launcher to ajax post
+// [ ] launcher: done() function
+// [ ] figure out server side POST output details with Christopher

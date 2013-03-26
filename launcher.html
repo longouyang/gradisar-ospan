@@ -9,32 +9,43 @@
 body {
   font-family: arial;
 }
+
+p {
+line-height: 1.25em;
+width: 500px;
+margin: 0 auto;
+margin-top: 1em;
+margin-bottom: 1em
+}
+
+#launch, #enter-id {
+display: none
+}
+
+#recall-text {
+    margin: 0 auto;
+    font-family: helvetica, arial, sans-serif;
+    font-size: 40px;
+}
+
 </style>
+<script src="launcher.js"> </script>
 </head>
 <body>
-  <button type="button" id="launcher">Launch full-screen</button>
+<div id="enter-id">
+<p>Please enter your ID number:</p>
+<input id="manual-id" type="text"></input>
+
+<p>Then click GO to start the <b>Equations and Words</b> task.</p>
+<button type="button" disabled="disabled">GO</button>
+
+</div>
+
+<div id="launch">
+  <p>Click the GO to start the <b>Equations and Words</b> task.</p>
+  <button type="button">GO</button>
   
-  
-  <iframe id="iframe" src="" style='border: 0'></iframe>
-<pre>
-TODO:
-get params, pass them to ospan.html
-detect user id thing
-</pre>
-</body>
-<script>
-
-var fsIE6 = function() {
-  window.open("ospan.html", "fullscreen", "fullscreen,directories=0,titlebar=0,toolbar=0,location=0,status=0,menubar=0,scrollbars=no,resizable=no")
-}
-
-var fsChrome = function() {
-  var $iframe = $("#iframe")[0];
-  $iframe.webkitRequestFullScreen();
-  $iframe.src = "ospan.html"
-}
-
-$("#launcher").click(fsIE6)
-
-</script>
+  <div id="done" style="font-size: 36px"></div>
+</div>
+</body> 
 </html>
