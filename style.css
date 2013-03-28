@@ -53,3 +53,6 @@
     font-weight: bold;
 }
 
+#error textarea {
+font-family: courier
+}

@@ -1,4 +1,4 @@
-/* global $z, $, setTimeout, clearTimeout, innerStream, _, console */
+/* global $z, $, setTimeout, clearTimeout, innerStream, _, log, urlParams, location, Base64 */
 
 Array.prototype.sum = function() {
   var i = this.length, r = 0;
@@ -11,6 +11,7 @@ Array.prototype.sum = function() {
 var wait = function(msec, fn) {
   setTimeout(fn, msec);
 };
+
 
 function setupRecall(options) {
   (function() {
@@ -251,23 +252,41 @@ var allWords = ["arch","horn","crab","vine","note",
     stream3 = getOuterStream({
       trials: trials3,
       after: function() {
-        var trialScores = this.completed.map(function(x) { return x.recallScore / x.correctWords.length }),
-            taskScore = trialScores.sum()/trialScores.length;
+        var completed = this.completed,
+            recallScores = completed.map(function(x) { return x.recallScore / x.correctWords.length }),
+            meanRecallScore = recallScores.sum()/recallScores.length,
+            mathErrors = completed.map(function(x) { return x.mathTotalErrors }).sum(),
+            mathTotals = completed.map(function(x) { return x.correctWords.length }).sum(),
+            mathScore = (mathTotals - mathErrors) / mathTotals;
+        
         if (window.opener) {
           window.opener.done();
         }
-        $z.showSlide("end");
         
-        var payload = {
-          taskScore: taskScore
-        };
+        var payload = _.extend({
+          meanRecallScore: meanRecallScore,
+          mathScore: mathScore,
+          rawData: JSON.stringify(completed)
+        }, urlParams);
+
+        // post to my mock.php if for some reason i don't feel like testing
+        // with GAE
+        var url = (location.href.match(/static/)) ? "/api/record" : "mock.php";
         
         // TODO: ajax
         $.ajax({
           type: "POST",
-          url: "mock.php",
+          url: url,
           data: payload,
-          success: function(x) { console.log(x)}
+          successbak: function(x) {
+            log(x);
+            $z.showSlide("success");
+          },
+          success: function(xhr, ajaxOptions, thrownError) {
+            log(xhr);
+            $("#error textarea").val(Base64.encode(JSON.stringify(payload)));
+            $z.showSlide("error");
+          }
         });
       }});
 
@@ -279,15 +298,14 @@ $z.showSlide("feedback2");
 
 //$z.showSlide("recall");
 
-
 // after real  trials
 
 
 
 // TODO: 
 // [x] launcher: read in parameters
-// [ ] task: read in parameters 
-// [v] task: mock ajax post
-// [ ] task: pass through parameters from launcher to ajax post
-// [ ] launcher: done() function
-// [ ] figure out server side POST output details with Christopher
+// [x] task: read in parameters 
+// [x] task: mock ajax post
+// [x] task: pass through parameters from launcher to ajax post
+// [x] launcher: done() function
+// [v] figure out server side POST output details with Christopher
