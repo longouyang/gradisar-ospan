@@ -1,51 +1,60 @@
 <html>
-<head>
-<title></title>
-<script src="js/underscore-1.4.4.min.js"></script>
-<script src="js/jquery-1.9.1.min.js"></script>
-<script src="js/zen-0.4.js"></script>
-<link rel="stylesheet" type="text/css" href="css/zen.css" />
-<style>
-body {
-  font-family: arial;
-}
+  <head>
+    <title></title>
+    <script src="js/underscore-1.4.4.min.js"></script>
+    <script src="js/jquery-1.9.1.min.js"></script>
+    <script src="js/zen-0.4.js"></script>
+    <script src="js/logging.js"></script>
+    <link rel="stylesheet" type="text/css" href="css/zen.css" />
+    <style>
+      body {
+      font-family: arial;
+      }
 
-p {
-line-height: 1.25em;
-width: 500px;
-margin: 0 auto;
-margin-top: 1em;
-margin-bottom: 1em
-}
+      p {
+      line-height: 1.25em;
+      width: 500px;
+      margin: 0 auto;
+      margin-top: 1em;
+      margin-bottom: 1em
+      }
 
-#launch, #enter-id {
-display: none
-}
+      #launch, #enter-id {
+      display: none
+      }
 
-#recall-text {
-    margin: 0 auto;
-    font-family: helvetica, arial, sans-serif;
-    font-size: 40px;
-}
+      #recall-text {
+      margin: 0 auto;
+      font-family: helvetica, arial, sans-serif;
+      font-size: 40px;
+      }
 
-</style>
-<script src="launcher.js"> </script>
-</head>
-<body>
-<div id="enter-id">
-<p>Please enter your ID number:</p>
-<input id="manual-id" type="text"></input>
+      #done {
+      display: none
+      }
 
-<p>Then click GO to start the <b>Equations and Words</b> task.</p>
-<button type="button" disabled="disabled">GO</button>
+    </style>
+    <script src="launcher.js"> </script>
+  </head>
+  <body>
+    <div id="enter-id">
+      <p>Please enter your ID number:</p>
+      <input id="manual-id" type="text"></input>
 
-</div>
+      <p>Then click GO to start the <b>Equations and Words</b> task.</p>
+      <button type="button" disabled="disabled">GO</button>
 
-<div id="launch">
-  <p>Click the GO to start the <b>Equations and Words</b> task.</p>
-  <button type="button">GO</button>
-  
-  <div id="done" style="font-size: 36px"></div>
-</div>
-</body> 
+    </div>
+
+    <div id="launch">
+      <p>Click the GO to start the <b>Equations and Words</b> task.</p>
+      <button type="button">GO</button>
+      
+    </div>
+
+    <div id="done">
+      <p>You've completed the <b>Equations and Words</b> task. Thanks!
+    </div>
+
+  </body> 
 </html>

@@ -1,11 +1,5 @@
-/* global location, _, $ */
+/* global location, _, $, console, log, paramString, urlDefines, urlParams */
 
-var paramString = (location.href.indexOf("?") == -1) ? "" :
-      _(location.href.split("?")).last(),
-    urlDefines = paramString
-      .split("&")
-      .map(function(x) { return x.split("=")}),
-    urlParams = _(urlDefines).object();
 
 var fsIE6 = function(paramString) {
   window.open("task.html?" + paramString, "fullscreen", "fullscreen,directories=0,titlebar=0,toolbar=0,location=0,status=0,menubar=0,scrollbars=no,resizable=no");
@@ -13,7 +7,7 @@ var fsIE6 = function(paramString) {
 
 
 $(document).ready(function() {
-  if (typeof urlParams["participant_id"] == "undefined") {
+  if (typeof urlParams["pid"] == "undefined") {
     $("#manual-id").keyup(function() {
       if ($(this).val().length > 0) {
         $("#enter-id button").removeAttr("disabled");
@@ -25,8 +19,8 @@ $(document).ready(function() {
     $("#enter-id button").one("click", function() {
       var id = $("#manual-id").val();
 
-      var newUrlDefines = paramString + "&participant_id=" + id;
-      console.log(newUrlDefines);
+      var newUrlDefines = paramString + "&pid=" + id;
+      log(newUrlDefines);
       fsIE6(newUrlDefines);
       
       
@@ -53,5 +47,6 @@ var fsChrome = function() {
 
 
 var done = function() {
-  $("#done").text("DONE");
+  $("#enter-id, #launcher").hide();
+  $("#done").show();
 };
