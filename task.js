@@ -103,7 +103,7 @@ var getOuterStream = function(params0) {
                 
                 $("#math-total-errors").text(totalErrors);
                 
-                $("#math-percentage").show();
+                // $("#math-percentage").show();
                 
                 setupRecall({
                   words: params.words,
@@ -235,7 +235,7 @@ var allWords = ["arch","horn","crab","vine","note",
     ],
     realWords = allWords.shuffle(),
     realMath = allMath.shuffle(),
-    trials3 = /*[2,3,4,5,6]*/[2].shuffle().map(function(size) {
+    trials3 = [2,3,4,5,6].shuffle().map(function(size) {
       var words = _(realWords).first(size),
           problems = _(realMath).first(size);
       
@@ -291,11 +291,8 @@ var allWords = ["arch","horn","crab","vine","note",
       }});
 
 
-
-$z.showSlide("feedback2");
-
-
-
+$z.showSlide("instructions1");
+//$z.showSlide("feedback2");
 //$z.showSlide("recall");
 
 // after real  trials
