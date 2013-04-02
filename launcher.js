@@ -31,7 +31,7 @@ $(document).ready(function() {
 
   } else {
     $("#launch button").one("click", function() {
-      fsIE6(urlDefines);
+      fsIE6(paramString);
     });
     $("#launch").show();
   }
