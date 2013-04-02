@@ -278,11 +278,11 @@ var allWords = ["arch","horn","crab","vine","note",
           type: "POST",
           url: url,
           data: payload,
-          successbak: function(x) {
+          success: function(x) {
             log(x);
             $z.showSlide("success");
           },
-          success: function(xhr, ajaxOptions, thrownError) {
+          error: function(xhr, ajaxOptions, thrownError) {
             log(xhr);
             $("#error textarea").val(Base64.encode(JSON.stringify(payload)));
             $z.showSlide("error");
