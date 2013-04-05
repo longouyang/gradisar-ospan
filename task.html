@@ -6,9 +6,9 @@
     <script src="js/jquery-1.9.1.min.js"></script>
     <script src="js/zen-0.4.js"></script>
     <script src="js/Base64.js"></script>
-    <script src="js/logging.js"></script>
-    <link rel="stylesheet" type="text/css" href="css/zen.css" />
-    <link rel="stylesheet" type="text/css" href="style.css" />
+    <script src="js/logging.js"></script> <link rel="stylesheet" type="text/css"
+    href="css/zen.css" /> <link rel="stylesheet" type="text/css"
+    href="style.css" />
   </head>
 
   <body>
@@ -31,14 +31,14 @@
 	<div class="zen-slide-center">
 	  <p>In this task, you will solve simple math problems while you also
 	    try to memorize words you see on the screen.</p>
-	  <p>You will be given a set of math problems and words to
-	    remember. For each math problem, you will see an equation and you
-	    will have to decide it is correct or incorrect. It is VERY important
-	    to solve the problems as quickly and as accurately as possible. Once
-	    you make your decision, a word will appear on the screen. Then, the
-	    next math problem will appear, then the next word, and so on. At the
-	    end of the sequence, you will have to type in all words in that
-	    order they appeared.</p>
+	  <p>You will be given a set of math problems and words to remember. For
+	    each math problem, you will see an equation and you will have to
+	    decide it is correct or incorrect. It is VERY important to solve the
+	    problems as <b>quickly</b> and as <b>accurately</b> as possible. Once you make
+	    your decision, a word will appear on the screen. Then, the next math
+	    problem will appear, then the next word, and so on. At the end of
+	    the sequence, you will have to type in all words in that order they
+	    appeared.</p>
 	  <p>Click NEXT to do some practice sets.</p>
 	  <button class="zen" type="button"
 	  onclick="stream1.start()">NEXT</button>
@@ -64,7 +64,8 @@
       </div>
 
       <div id="recall" class="zen-slide">
-	<p>Enter the words in order. Put each word on its own line. If you forgot a word, leave that line blank.</p>
+	<p>Enter the words in order. Put each word on its own line. If you
+	forgot a word, leave that line blank.</p>
 	<div><textarea id="recall-text" rows="7" cols="8"></textarea></div>
 	<button id="end-recall" class="zen" type="button">NEXT</button>
       </div>
@@ -80,7 +81,8 @@
 	  on its own line. Click NEXT when you are ready to do the next practice
 	  set.
 	</p>
-	<button class="zen" type="button" onclick="stream2.start()">NEXT</button>
+	<button class="zen" type="button"
+	onclick="stream2.start()">NEXT</button>
       </div>
 
       <div id="feedback2" class="zen-slide">
@@ -91,19 +93,21 @@
 	  its own line. In the real sets, you will not be told whether your
 	  answers are correct. Click NEXT to start the real sets.
 	</p>
-	<button class="zen" type="button" onclick="stream3.start()">NEXT</button>
+	<button class="zen" type="button"
+	onclick="stream3.start()">NEXT</button>
       </div>
       
 
 
 
       <div class="zen-slide" id="success">
-	Thanks - you've finished the task.
+	Thanks - you've finished the task. You should close this window now.
       </div>
       <div class="zen-slide" id="error">
-	<p>You've finished the task but there was some sort of error submitting the
-	results to the server. If you can, please copy down this text to a file
-	and have your teacher email it to the people that run this task:</p>
+	<p>You've finished the task but there was some sort of error submitting
+	the results to the server. If you can, please copy down this text to a
+	file and have your teacher email it to the people that run this
+	task:</p>
 
 	<textarea cols="77" rows="20"></textarea>
 
