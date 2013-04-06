@@ -2,7 +2,7 @@
 
 
 var fsIE6 = function(paramString) {
-  window.open("task.html?" + paramString, "fullscreen", "fullscreen,directories=0,titlebar=0,toolbar=0,location=0,status=0,menubar=0,scrollbars=no,resizable=no");
+  window.open("task.html?" + paramString, "fullscreen", "fullscreen,height="+screen.height+",width="+screen.width+"directories=0,titlebar=0,toolbar=0,location=0,status=0,menubar=0,scrollbars=no,resizable=no");
 };
 
 
