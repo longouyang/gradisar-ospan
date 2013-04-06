@@ -257,7 +257,9 @@ var allWords = ["arch","horn","crab","vine","note",
             meanRecallScore = recallScores.sum()/recallScores.length,
             mathErrors = completed.map(function(x) { return x.mathTotalErrors }).sum(),
             mathTotals = completed.map(function(x) { return x.correctWords.length }).sum(),
-            mathScore = (mathTotals - mathErrors) / mathTotals;
+            mathScore = (mathTotals - mathErrors) / mathTotals,
+            mathRts = [].concat.apply([], completed.pluck("mathRts")),
+            meanMathRt = mathRts.sum() / mathRts.length;
         
         if (window.opener) {
           window.opener.done();
@@ -266,6 +268,7 @@ var allWords = ["arch","horn","crab","vine","note",
         var payload = _.extend({
           meanRecallScore: meanRecallScore,
           mathScore: mathScore,
+          meanMathRt: meanMathRt,
           rawData: JSON.stringify(completed)
         }, urlParams);
 
