@@ -130,19 +130,19 @@ var getOuterStream = function(params0) {
                 
               },
 	            trialStart: function(params1) {
-	              $z.showSlide("math");
-	              totalMathProblems++;
-	              
-	              var prompt = params1.prompt,
+                var prompt = params1.prompt,
 		                promptCorrect = params1.promptCorrect,
                     word = params1.word;
+
+                $("#math-prompt").text(prompt);
+                $("#word-text").text("");
+                
+	              $z.showSlide("math");
+	              totalMathProblems++;
 
 	              if (localMathErrors >= 3) {
 		              // $("#math-error-warning").show();
 	              }
-
-                $("#math-prompt").text(prompt);
-                $("#word-text").text(word);
 
                 var timeStart = (new Date()).getTime();
 
@@ -161,6 +161,7 @@ var getOuterStream = function(params0) {
 		                  totalMathErrors++;
 		                }
 
+                    $("#word-text").text(word);
 		                $z.showSlide("word");
 		                wait(1000, function() {
                       innerStream.end({
