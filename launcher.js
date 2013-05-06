@@ -47,6 +47,6 @@ var fsChrome = function() {
 
 
 var done = function() {
-  $("#enter-id, #launcher").hide();
+  $("#enter-id, #launch").hide();
   $("#done").show();
 };
